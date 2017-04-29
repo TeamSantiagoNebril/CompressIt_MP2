@@ -1,20 +1,25 @@
 package main;
 
-import java.awt.Color;
+import java.io.IOException;
 
-import javax.swing.JFrame;
+//import java.awt.Color;
+//import java.awt.Dimension;
+//import java.awt.Toolkit;
 
-import GUI.Gui;
+//import javax.swing.JFrame;
+
+import GUI.CombinationGui;
+//import GUI.Gui;
 
 public class Main {
 	
 	public static void main(String args[])
 	{
-		Gui gui = new Gui();
-		gui.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		gui.setUndecorated(true);
-		gui.setLocationRelativeTo(null);
-	    gui.setBackground(new Color(0, 0, 0, 0));
-	    gui.setVisible(true);
+		try {
+			CombinationGui g = new CombinationGui();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -2,21 +2,29 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 //import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 //import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 public class Gui extends JFrame{
 	/**
@@ -28,14 +36,25 @@ public class Gui extends JFrame{
 	private JButton minimizeButton;
 	//private int pX;
 	//private int pY;
-	private JPanel mainPanel;
+	public JPanel mainPanel;
 	private JFrame frame;
-	//private JPanel buttonPanel;
 	public Gui(){
+		
+		try {
+		    setIconImage(ImageIO.read(new File("pics/Huffman_ImageIcon.png")));
+		}
+		catch (IOException exc) {
+		    exc.printStackTrace();
+		}
+		//this.setLayout(null);
 		frame = this;
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
+		mainPanel.setLocation(0,0);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		//gui.setSize(screenSize);
+		mainPanel.setSize(screenSize);
+		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.85));
 		
 		customMenu = new JMenuBar();
 		//customMenu.setLayout(new BorderLayout());
@@ -97,15 +116,10 @@ public class Gui extends JFrame{
 		customMenu.add(minimizeButton);
 		customMenu.add(closeButton);
 		customMenu.setBorderPainted(false);
-		customMenu.setOpaque(false);
-		//customMenu.setBackground(new Color(0f, 0f, 0f, 0.95f));
+		customMenu.setBackground(Color.BLACK);
 		
 		mainPanel.add(customMenu, BorderLayout.NORTH);
 		add(mainPanel);
 	}
 	
-	
-	//public static void main(String args[]){
-
-	//}
 }

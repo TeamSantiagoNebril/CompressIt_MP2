@@ -1,0 +1,152 @@
+  //gui.pack();
+/*Panel fix for carrier of imagePanel and Console*/
+	    /*constraint = new GridBagConstraints();
+	    constraint.anchor = GridBagConstraints.NORTHWEST;
+		constraint.weightx = 0;
+		constraint.weighty = 1;
+		constraint.ipady = 710;      //make this component tall
+		constraint.ipadx = 1080;  
+		constraint.insets = new Insets(5, 5, 5, 5);
+		constraint.gridx = 0;
+		constraint.gridy = 1;*/
+		
+		
+		
+		    //centerPanel.setLayout();
+	    
+	    
+	    /*constraint = new GridBagConstraints();
+	    constraint.fill = GridBagConstraints.HORIZONTAL;
+	    constraint.gridx = 0;
+	    constraint.gridy = 0;
+	   // constraint.ipadx = 500;
+	    constraint.ipady = 710;
+	    constraint.anchor = GridBagConstraints.NORTHEAST;
+	    //constraint.gridwidth= 3;
+	    constraint.weightx = 1;
+	    constraint.weighty = 1;*/
+	    
+	    
+	    //vertSplitPane.setOneTouchExpandable(true);
+	    //vertSplitPane.setDividerLocation(0.5);
+	    //vertSplitPane.setLayout(new GridLayout());
+	    
+	    //vertSplitPane.getLeftComponent().setMinimumSize(new Dimension(100, 50));
+	    
+	    //splitPane.setOneTouchExpandable(true);
+	     //vertSplitPane
+	     
+	       //vertSplitPane.setResizeWeight(0.5);
+	    //centerPanel.add(vertSplitPane);
+	    
+	    //horizontalSplitPane.setBackground(Color.MAGENTA);
+	    //vertSplitPane.getLeftComponent().setMinimumSize(new Dimension(100, 50));
+	    
+	     //splitPane.setOneTouchExpandable(true);
+       //vertSplitPane
+       
+       /*Panel fix for functionPanel*/
+	    /*constraint = new GridBagConstraints();
+	    constraint.fill = GridBagConstraints.RELATIVE;
+	    constraint.anchor = GridBagConstraints.NORTHWEST;
+		constraint.weightx = 0;
+		constraint.weighty = 0;
+		constraint.ipady = 705;      //make this component tall
+		constraint.ipadx = 251;  
+		constraint.insets = new Insets(5, 5, 0, 0);
+		constraint.gridx = 2;
+		constraint.gridy = 1;*/
+	    
+	   // gui.mainPanel.add(functionPanel, constraint);
+
+//	    centerPanel.add(functionPanel);
+	    
+	    /*constraint = new GridBagConstraints();
+	    constraint.fill = GridBagConstraints.RELATIVE;
+	    constraint.anchor = GridBagConstraints.SOUTHWEST;
+		constraint.weightx = 0;
+		constraint.weighty = 0;
+		constraint.ipady = 100;      //make this component tall
+		constraint.ipadx = 60;  
+		constraint.insets = new Insets(5, 5, 5, 5);
+		constraint.gridx = 0;
+		constraint.gridy = 3;
+	    console = new JPanel();
+	    console.setBackground(Color.GREEN);*/
+	    
+	    //gui.mainPanel.add(console, constraint);
+	    //consoleTextArea = new JTextArea();
+	    //consoleTextArea.setBounds(0,0,1050,115);
+	    //consoleTextArea.setEditable(false);
+	    //consoleTextArea.setBackground(new Color(0f,0.0f,0.0f,0.4f));
+	    //consoleTextArea.setForeground(Color.BLUE);
+	    //consoleTextArea.setText("Test String\n Created By:\n \tAerol Nebril\n \tBea Santiago");
+	    
+	    //JScrollPane scrollPane = new JScrollPane(consoleTextArea);
+	    //scrollPane.setViewportView(consoleTextArea);
+	    //scrollPane.setBounds(0,0,1050,115);
+	    //scrollPane.setBackground(new Color(0f,0.0f,0.0f,0.0f));
+	    //scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+	    //console.add(consoleTextArea);
+	    
+//	    centerPanel.add(console);
+
+/*
+
+
+functionPanel = new JPanel();
+functionPanel.setLocation(1051, 0);
+functionPanel.setSize(310, 716);
+functionPanel.setLayout(new GridLayout(5, 1));
+//functionPanel.setBackground(Color.BLUE);
+JPanel[] gg = new JPanel[3];
+float r = 0.1f;
+for(int i = 0; i < 3; i++)
+{
+	gg[i] = new JPanel();
+	gg[i].setBackground(new Color(0f,0f,0f + r,1f));
+	r += 0.1f;
+}
+
+functionPanel.add(gg[0]);
+gg[0].setLocation(0, 0);
+gg[0].setSize(310, 50);
+JLabel menuLabel = new JLabel("Menu");
+menuLabel.setFont(new Font("Arial", Font.BOLD, 18));
+menuLabel.setForeground(Color.ORANGE);
+menuLabel.setLocation(0,0);
+menuLabel.setSize(310, 50);
+menuLabel.setHorizontalAlignment(SwingConstants.CENTER);
+gg[0].setLayout(new GridLayout(2, 2));
+gg[0].add(menuLabel);
+
+functionPanel.add(gg[1]);
+gg[1].setLocation(0, 50);
+gg[1].setSize(310, 400);
+
+
+JLabel openLabel = new JLabel("Open File(.png): ");
+openLabel.setLocation(0,20);
+openLabel.setSize(210,40);
+openLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+openLabel.setForeground(Color.ORANGE);
+gg[1].add(openLabel);
+JTextField addressField = new JTextField("C:\\");
+addressField.setLocation(10,60);
+addressField.setSize(210,30);
+gg[1].add(addressField);
+JButton openButton = new JButton("Browse");
+//openButton = new JButton("X");
+openButton.setFont(new Font("Arial", Font.BOLD, 13));
+openButton.setForeground(Color.WHITE);
+openButton.setFocusPainted(false);
+openButton.setBackground(new Color(0f, 0f, 0f, 1f));
+openButton.setBorderPainted(false);
+openButton.setLocation(220, 60);
+openButton.setSize(100, 30);
+gg[1].add(openButton);
+
+functionPanel.add(gg[2]);
+gg[2].setLocation(0, 400);
+gg[2].setSize(310, 330);
+*/
