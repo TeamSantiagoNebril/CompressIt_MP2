@@ -13,15 +13,10 @@ import java.util.Comparator;
 import java.io.FileWriter;
 import java.io.FileReader;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import java.io.BufferedReader;
 
-public class LoadImage extends JFrame
+public class LoadImage
 {
-	/**
-	 * 
-	 **/
-	private static final long serialVersionUID = 1L;
 	private BufferedImage img = null;
 	private int temporary[];
 	private int rgb[];
@@ -38,9 +33,7 @@ public class LoadImage extends JFrame
 	private String lastBin = "";
 	private int imageWidth;
 	private int imageHeight;
-	
 	private File file;
-
 	
 	public LoadImage(File file)
 	{
@@ -53,6 +46,7 @@ public class LoadImage extends JFrame
 		first = null;
 	}
 
+	
 	public void getImage(){
 		try 
 		{
@@ -299,7 +293,7 @@ public class LoadImage extends JFrame
 		
 	}
 	
-	public void updtateHuffmanFile(Path fileToBeUpdated)
+	public void updateHuffmanFile(Path fileToBeUpdated)
 	{
 		getImage();
 		extractPixelInformation();
@@ -454,8 +448,6 @@ public class LoadImage extends JFrame
 			String[] imgSize = sizeLine.split("x");
 			imageWidth = Integer.parseInt(imgSize[0]);
 			imageHeight = Integer.parseInt(imgSize[1]);
-			//System.out.println(imageHeight);
-			//System.out.println(imageWidth);
 			while(r.read() != -1)
 			{
 				charCounter++;

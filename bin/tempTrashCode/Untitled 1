@@ -150,3 +150,82 @@ functionPanel.add(gg[2]);
 gg[2].setLocation(0, 400);
 gg[2].setSize(310, 330);
 */
+
+
+//gui.revalidate();
+				//gui.repaint();
+				/*compressor = new LoadImage(selectedFile);
+				console.addText("Writing Huffman File");
+				gui.repaint();
+				//thread = new LoadingThread(console, gui, "Writing Huffman File"); // thread
+				//thread.start();
+				//gui.repaint();
+				compressor.writeHuffmanToFile();
+				//thread.deActivate(true);
+				console.addText("Successfully wrote Huffman Distribution to " + selectedFile.getAbsolutePath().substring(0, selectedFile.getAbsolutePath().lastIndexOf('.')) + ".HUFF");
+				gui.repaint();*/
+				
+				//console.addText("Huffman Creation Cancelled");
+				//gui.repaint();
+				
+				//gui.repaint();
+				//thread = new LoadingThread(console, gui, "Updating Huffman File"); // thread
+				//thread.start();
+				//gui.repaint();
+				//compressor = new LoadImage(selectedFile, 1, filePath);
+				//compressor.start();
+				//thread.deActivate(true);
+				//loadImage("pics\\Loader.gif");
+				//gui.repaint();
+				
+				//thread.deActivate(true);
+				
+				//console.addText("Huffman Update Cancelled");
+				//gui.repaint();
+				
+					/*
+			//	compressor = new LoadImage(selectedFile);
+				File huffmanFile = browse("Huffman File", "HUFF");
+				console.addText("Compressing Currently Rendered Image");
+				gui.repaint();
+				//thread = new LoadingThread(console, gui, "Compressing Image"); // thread
+				//thread.start();
+				//gui.repaint();
+				compressor.compress(huffmanFile);
+				//thread.deActivate(true);
+				console.addText("Image successfully Compressed!");
+				gui.repaint();*/
+				
+				//thread.deActivate(true);
+				//console.addText("Huffman Compression Cancelled");
+				//gui.repaint();
+				
+				//compressor = new LoadImage();
+				//thread = new LoadingThread(console, gui, "Decompressing Compressed Image"); // thread
+				//thread.start();
+				//BufferedImage g = compressor.deCompress(tobeDecompressed, huffman);
+				//thread.deActivate(true);
+				//console.addText("Image successfully Decompressed!");
+				//gui.repaint();
+				
+				//thread.deActivate(true);
+				//console.addText("Opening Image Cancelled");
+				//gui.repaint();
+				
+				
+				public String browseDirectory()
+	{
+		String directory = null;
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop"));
+		chooser.setDialogTitle("Select Folder");
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setAcceptAllFileFilterUsed(false);
+		int result = chooser.showOpenDialog(gui);
+		if (result == JFileChooser.APPROVE_OPTION)
+		{
+		    directory = chooser.getCurrentDirectory().getAbsolutePath();
+		}
+		return directory;
+	}
+	
