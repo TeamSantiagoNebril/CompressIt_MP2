@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,12 +15,12 @@ import java.io.FileReader;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.io.BufferedReader;
-import java.awt.image.BufferedImage;
 
-public class LoadImage extends JFrame{
+public class LoadImage extends JFrame
+{
 	/**
 	 * 
-	 */
+	 **/
 	private static final long serialVersionUID = 1L;
 	private BufferedImage img = null;
 	private int temporary[];
@@ -41,6 +40,7 @@ public class LoadImage extends JFrame{
 	private int imageHeight;
 	
 	private File file;
+
 	
 	public LoadImage(File file)
 	{
@@ -59,7 +59,6 @@ public class LoadImage extends JFrame{
 		    img = ImageIO.read(file);
 		    imageWidth = img.getWidth();
 		    imageHeight = img.getHeight();
-		    //System.out.println(imageWidth + " : " + imageHeight);
 		} catch (IOException e)
 		{
 			System.err.println("Error");
@@ -70,21 +69,18 @@ public class LoadImage extends JFrame{
 	{
 		try
 		{
-			BufferedImage sheeet = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
 			rgb = new int[img.getHeight()*img.getWidth()];
 			temporary= new int[img.getHeight()*img.getWidth()];
 			int temp;
-			for(int a = 0; a < img.getHeight()-1; a++)
+			for(int a = 0; a < img.getHeight(); a++)
 			{
-				for(int b = 0; b < img.getWidth()-1; b++)
+				for(int b = 0; b < img.getWidth(); b++)
 				{
 					temp = img.getRGB(b,a);
-					sheeet.setRGB(b, a, temp);
 					temporary[counter] = temp;
 					rgb[counter++] = temp;
 				}
 			}
-			//ImageIO.write(sheeet, "png", new File("pics\\image2.charot"));
 		}catch(Exception e){}
 	}
 
@@ -106,6 +102,7 @@ public class LoadImage extends JFrame{
 			}
 
 		}
+		count++;
 		
 		freq = Arrays.copyOfRange(freq, 0, count);
 		Comparator<int[]> arrayComparator = new Comparator<int[]>()
@@ -238,6 +235,7 @@ public class LoadImage extends JFrame{
 	
 	public void writeHuffmanToFile()
 	{
+		
 		getImage();
 		extractPixelInformation();
 		getFrequencies();
@@ -356,7 +354,7 @@ public class LoadImage extends JFrame{
 			//fileContent.sort(Comparator.comparing(Integer::parseInt));
 			
 			Files.write(filePath, fileContent, StandardCharsets.US_ASCII);
-			System.out.println("Update successful");
+			//System.out.println("Update successful");
 		} catch (IOException e) 
 		{
 			e.printStackTrace();
@@ -444,26 +442,25 @@ public class LoadImage extends JFrame{
 		int b = 0;
 		BufferedImage sheeet = null;
 		try{
-			//int d ;
 			int c = 0;
-			System.out.println("\nDecompress\n");
+			//System.out.println("\nDecompress\n");
 			String temp = "";
 			File file = toBeDecompressed;
 			FileReader reader = new FileReader(file);
 			/**************************************************************************************/
+			@SuppressWarnings("resource")
 			BufferedReader r = new BufferedReader(reader);
 			String sizeLine = r.readLine();
-			//r.m
 			String[] imgSize = sizeLine.split("x");
 			imageWidth = Integer.parseInt(imgSize[0]);
 			imageHeight = Integer.parseInt(imgSize[1]);
-			System.out.println(imageHeight);
-			System.out.println(imageWidth);
+			//System.out.println(imageHeight);
+			//System.out.println(imageWidth);
 			while(r.read() != -1)
 			{
 				charCounter++;
 			}
-			
+			charCounter++;
 			r.close();
 			reader = new FileReader(file);
 			r = new BufferedReader(reader);
@@ -497,21 +494,19 @@ public class LoadImage extends JFrame{
 					{
 						sheeet.setRGB(a, b, lastNode.getRGBValue());
 						lastNode = first.root;
-						if(a == imageWidth-1)
+						a++;
+						if(a == imageWidth)
 						{
 							a = 0;
 							b++;
 						}
-						a++;
 					}
 				}
 			}
 
-			//ImageIO.write(sheeet, "png", new File("pics\\image.charot"));
 
 		}catch(Exception e)
 		{
-			System.out.println("Grabeh ka");
 			System.err.println(e);
 		}
 		return sheeet;
@@ -525,8 +520,4 @@ public class LoadImage extends JFrame{
 			lastNode = lastNode.right;
 		}
 	}
-
-	//public static void main(String args[]){
-		//LoadImage image = new LoadImage(new File("pics\\default.png"));
-	//}
 }

@@ -14,7 +14,7 @@ public class ConsoleJPanel extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel[] consoleText;
+	public JLabel[] consoleText;
 	private int numRow;
 	public ConsoleJPanel(int numRow)
 	{
@@ -30,6 +30,7 @@ public class ConsoleJPanel extends JPanel
 			consoleText[i].setOpaque(false);
 			add(consoleText[i]);
 		}
+		consoleText[3].setFont(new Font("Arial", Font.BOLD, 15));
 		
 	}
 	
