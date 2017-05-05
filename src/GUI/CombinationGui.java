@@ -3,24 +3,17 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,16 +23,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import core.LoadImage;
 
 public class CombinationGui implements ActionListener
 {
@@ -51,7 +44,7 @@ public class CombinationGui implements ActionListener
 	private ConsoleJPanel console;
 	private JSplitPane vertSplitPane;
 	private JSplitPane horizontalSplitPane;
-	
+	private LoadImage compressor;
 
 	private JTextField openFileTextField;
 	private JButton openFileBrowse;
@@ -59,11 +52,11 @@ public class CombinationGui implements ActionListener
 	private JButton updateHuffman;
 	private JButton compressImage;
 	private JButton openCompressImage;
-	private boolean ImageLoaded = false;
 	private ImageIcon image;
 	private JLabel imageLabel;
     private JScrollPane scroller;
     private JPanel imagePane;
+    private File selectedFile;
 	
 	public CombinationGui() throws IOException
 	{
@@ -222,8 +215,8 @@ public class CombinationGui implements ActionListener
 	    
 	    /***************************ImagePanel Configuration***********************/
 	    imagePanel.setLayout(new GridLayout());
-	    //imagePanel.add(new ImagePanel("pics/default1.png"));
-	    loadImage("pics/default2.png");
+	    selectedFile = new File("pics/default2.png");
+	    loadImage(selectedFile.getAbsolutePath());
 	    /***************************ImagePanel Configuration***********************/
 	    
 	    /***************************console Configuration***********************/
@@ -238,6 +231,8 @@ public class CombinationGui implements ActionListener
 	    openFileBrowse.addActionListener(this);
 	    compressImage.addActionListener(this);
 	    openCompressImage.addActionListener(this);
+	    createNew.addActionListener(this);
+	    updateHuffman.addActionListener(this);
 	    /*********Adding Listeners****************/
 	    
 	    gui.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -261,13 +256,15 @@ public class CombinationGui implements ActionListener
 	}
 
 	
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		
 		if(event.getSource() == openFileBrowse)
 		{
-			File selectedFile;
-			JFileChooser fileChooser = null;
+			selectedFile = browse("PNG Images","png");
+			loadImage(selectedFile.getAbsolutePath());
+			/*JFileChooser fileChooser = null;
 			LookAndFeel previousLF = UIManager.getLookAndFeel();
 			try
 			{
@@ -285,43 +282,60 @@ public class CombinationGui implements ActionListener
 			{
 			    selectedFile = fileChooser.getSelectedFile();
 			    loadImage(selectedFile.getAbsolutePath());
-				//imagePanel.add(new ImagePanel(selectedFile.getAbsolutePath()));
 				console.addText("Browse Button Successful");
-			}
+			}*/
 		}
 		else if(event.getSource() == openFileTextField)
 		{
-			File f = new File(openFileTextField.getText());
-			if(f.exists() && f.getAbsolutePath().contains(".png"))
+			selectedFile = new File(openFileTextField.getText());
+			if(selectedFile.exists() && selectedFile.getAbsolutePath().contains(".png"))
 			{
-				loadImage(f.getAbsolutePath());
-				 //imagePanel.add(new ImagePanel(f.getAbsolutePath()));
+				loadImage(selectedFile.getAbsolutePath());
 				console.addText("Successful");
 			}
 			else
 			{
 				JOptionPane.showMessageDialog(gui
-						, "File on Path: '" + f.getAbsolutePath() + "' not found!"
+						, "File on Path: '" + selectedFile.getAbsolutePath() + "' not found!"
 						, "Error"
 						, JOptionPane.ERROR_MESSAGE);
 			}
-			//System.out.println("hello!");
 		}
 		else if(event.getSource() == createNew)
 		{
-			
+			compressor = new LoadImage(selectedFile);
+			console.addText("Writing Huffman File");
+			gui.repaint();
+			compressor.writeHuffmanToFile();
+			console.addText("Successfully wrote Huffman Distribution to " + selectedFile.getAbsolutePath().substring(0, selectedFile.getAbsolutePath().lastIndexOf('.')) + ".HUFF");
+			gui.repaint();
 		}
 		else if(event.getSource() == updateHuffman)
 		{
-			
+			 compressor = new LoadImage(selectedFile);
+			 System.out.println(selectedFile + "gg");
+			 JOptionPane.showConfirmDialog(null, "Please select the Huffman File to be Updated", "Update", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+			 File huffmanFile = browse("Huffman File", "HUFF");
+			 Path filePath = Paths.get(huffmanFile.getAbsolutePath());
+			 compressor.updtateHuffmanFile(filePath);
 		}
 		else if(event.getSource() == compressImage)
 		{
-			
+			compressor = new LoadImage(selectedFile);
+			File huffmanFile = browse("Huffman File", "HUFF");
+			console.addText("Compressing Currently Rendered Image");
+			gui.repaint();
+			compressor.compress(huffmanFile);
 		}
 		else if(event.getSource() == openCompressImage)
 		{
-			initialize();
+			JOptionPane.showConfirmDialog(null, "Please select the file to be decompressed", "Decompression", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+			File tobeDecompressed = browse("Compressed Image File", "San");
+			JOptionPane.showConfirmDialog(null, "Please select the Huffman File to be used", "Decompression", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+			File huffman = browse("Huffman File", "Huff");
+			compressor = new LoadImage();
+			BufferedImage g = compressor.deCompress(tobeDecompressed, huffman);
+			initialize(g);
 			timer.start();
 		}
 	}
@@ -353,12 +367,11 @@ public class CombinationGui implements ActionListener
 	private int row = 0;
 	private Timer timer;
 	
-	public void initialize()
+	public void initialize(BufferedImage img)
 	{
-		//drawnImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		origImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		try {
-			origImage = ImageIO.read(new File("C:\\Users\\User\\Documents\\cmsc130mp2\\CompressIt_MP2\\pics\\avalancheEffectSha1.png"));
+		//origImage = ;
+		//try {
+			origImage = img;
 			row = origImage.getWidth();
 			column = origImage.getHeight();
 			
@@ -380,15 +393,6 @@ public class CombinationGui implements ActionListener
 			scroller.setAutoscrolls(true);
 			imagePanel.add(scroller);
 			gui.repaint();
-			//imagePanel.repaint();
-			//imageLabel.repaint();
-			 
-
-		} catch (IOException e) {
-			System.exit(-1);
-			System.out.println("GG");
-			e.printStackTrace();
-		}
 		
 		row = 0;
 		column = 0;
@@ -403,47 +407,43 @@ public class CombinationGui implements ActionListener
 		    		{
 		    			drawnImage.setRGB(row, column, origImage.getRGB(row, column));
 				    	
-					       // gui.repaint();
-
-					       /* column++;
-
-					        if (column >= origImage.getWidth())
-					        {
-					            row++;
-					            column = 0;
-					        }
-
-					        
-					        if (row >= origImage.getHeight())
-					        {
-					        	//if(row == origImage.getHeight())
-					        	//{
-					        		
-					        		//break;
-					        	//}
-					        	//else
-					        	//{
-					        		Timer timer = (Timer)e.getSource();	
-					        		timer.stop();
-					        		gui.repaint();
-							        gui.revalidate();
-					        		
-					        	//}
-					            
-					            
-					        }*/
 		    		}
 		    		//this loop is the fastest image display Bee
 		    		
 			        gui.repaint();
 			        gui.revalidate();
 			        timer.stop();
-	        		//gui.repaint();
-			        //gui.revalidate();
 			        
 		    	}
 		    	
 		    }
 		});
+	}
+	
+	
+	public File browse(String type, String extension)
+	{
+		File selected = null;
+		JFileChooser fileChooser = null;
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		    fileChooser = new JFileChooser();
+		    UIManager.setLookAndFeel(previousLF);
+		}
+		catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException e) {}
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop"));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter( type,extension);
+		fileChooser.setFileFilter(filter);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		int result = fileChooser.showOpenDialog(gui);
+		if (result == JFileChooser.APPROVE_OPTION)
+		{
+		    selected = fileChooser.getSelectedFile();
+		    //loadImage(selectedFile.getAbsolutePath());
+			//console.addText("Browse Button Successful");
+		}
+		return selected;
 	}
 }

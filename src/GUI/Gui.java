@@ -6,25 +6,19 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-//import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 public class Gui extends JFrame{
 	/**
@@ -34,8 +28,6 @@ public class Gui extends JFrame{
 	private JMenuBar customMenu;
 	private JButton closeButton;
 	private JButton minimizeButton;
-	//private int pX;
-	//private int pY;
 	public JPanel mainPanel;
 	private JFrame frame;
 	public Gui(){
