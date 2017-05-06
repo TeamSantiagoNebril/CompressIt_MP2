@@ -55,6 +55,8 @@ public class CombinationGui implements ActionListener
     private JScrollPane scroller;
     private JPanel imagePane;
     private File selectedFile;
+    
+    private MouseAdapter mouseAdapter;
     	
 	public CombinationGui() throws IOException
 	{
@@ -233,7 +235,7 @@ public class CombinationGui implements ActionListener
 	    createNew.addActionListener(this);
 	    updateHuffman.addActionListener(this);
 	    
-	    MouseAdapter mouseAdapter = new MouseAdapter(){
+	    mouseAdapter = new MouseAdapter(){
 	    	public void mouseEntered(MouseEvent e)
 	    	{
 	    		if(e.getSource() == openFileBrowse)
@@ -366,12 +368,14 @@ public class CombinationGui implements ActionListener
 		{
 			try
 			{
-				BackgroundWorker bWorker = new BackgroundWorker(selectedFile, this, 0, new File(""));
-				bWorker.execute();
+				loadLoadingPic();
+				BackgroundWorker bWorker1 = new BackgroundWorker(selectedFile, this, 0, new File(""));
+				bWorker1.execute();
 
 			}
 			catch(NullPointerException e)
 			{
+				cancelLoadingPic();
 				JOptionPane.showConfirmDialog(null, "Huffman Creation Cancelled", "Huffman Creation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
 				
 			}
@@ -387,16 +391,16 @@ public class CombinationGui implements ActionListener
 				File huffmanFile = browse("Huffman File", "HUFF");
 				Path filePath = Paths.get(huffmanFile.getAbsolutePath());
 				
-				
-				BackgroundWorker bWorker = new BackgroundWorker(selectedFile, this, 1, filePath);
-				bWorker.execute();
+				loadLoadingPic();
+				BackgroundWorker bWorker2 = new BackgroundWorker(selectedFile, this, 1, filePath);
+				bWorker2.execute();
 				
 				gui.revalidate();
 				gui.repaint();
 			}
 			catch(NullPointerException e)
 			{
-				
+				cancelLoadingPic();
 				JOptionPane.showConfirmDialog(null, "Huffman Update Cancelled", "Huffman Update", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
 				
 			}
@@ -407,8 +411,9 @@ public class CombinationGui implements ActionListener
 			try
 			{
 				File huffmanFile = browse("Huffman File", "HUFF");
-				BackgroundWorker bWorker = new BackgroundWorker(selectedFile, this, 2, huffmanFile);
-				bWorker.execute();
+				loadLoadingPic();
+				BackgroundWorker bWorker3 = new BackgroundWorker(selectedFile, this, 2, huffmanFile);
+				bWorker3.execute();
 				
 				gui.revalidate();
 				gui.repaint();
@@ -416,6 +421,7 @@ public class CombinationGui implements ActionListener
 			}
 			catch(NullPointerException e)
 			{
+				cancelLoadingPic();
 				JOptionPane.showConfirmDialog(null, "Huffman Compression Cancelled", "Huffman Compression", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
 				
 			}
@@ -430,8 +436,9 @@ public class CombinationGui implements ActionListener
 				JOptionPane.showConfirmDialog(null, "Please select the Huffman File to be used", "Decompression", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
 				File huffman = browse("Huffman File", "Huff");
 				
-				BackgroundWorker bWorker = new BackgroundWorker(tobeDecompressed, this, 3, huffman);
-				bWorker.execute();
+				loadLoadingPic();
+				BackgroundWorker bWorker4 = new BackgroundWorker(tobeDecompressed, this, 3, huffman);
+				bWorker4.execute();
 				
 				gui.revalidate();
 				gui.repaint();
@@ -439,7 +446,7 @@ public class CombinationGui implements ActionListener
 			}
 			catch(NullPointerException e)
 			{
-				
+				cancelLoadingPic();
 				JOptionPane.showConfirmDialog(null, "Opening Image Cancelled", "Opening Image", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
 			}
 		}
@@ -540,6 +547,13 @@ public class CombinationGui implements ActionListener
 		updateHuffman.setEnabled(false);
 		compressImage.setEnabled(false);
 		openCompressImage.setEnabled(false);
+		
+		openFileTextField.removeMouseListener(mouseAdapter);
+	    openFileBrowse.removeMouseListener(mouseAdapter);
+	    compressImage.removeMouseListener(mouseAdapter);
+	    openCompressImage.removeMouseListener(mouseAdapter);
+	    createNew.removeMouseListener(mouseAdapter);
+	    updateHuffman.removeMouseListener(mouseAdapter);
 	}
 	
 	public void enableAll()
@@ -550,5 +564,29 @@ public class CombinationGui implements ActionListener
 		updateHuffman.setEnabled(true);
 		compressImage.setEnabled(true);
 		openCompressImage.setEnabled(true);
+		
+		openFileTextField.addMouseListener(mouseAdapter);
+	    openFileBrowse.addMouseListener(mouseAdapter);
+	    compressImage.addMouseListener(mouseAdapter);
+	    openCompressImage.addMouseListener(mouseAdapter);
+	    createNew.addMouseListener(mouseAdapter);
+	    updateHuffman.addMouseListener(mouseAdapter);
 	}
+	
+	public void loadLoadingPic()
+	{
+		loadImage("pics\\loader.gif");
+		disableAll();
+		gui.revalidate();
+   		gui.repaint();
+	}
+	
+	public void cancelLoadingPic()
+	{
+		loadImage(selectedFile.getAbsolutePath());
+   		enableAll();
+   		gui.revalidate();
+   		gui.repaint();
+	}
+	
 }

@@ -1,4 +1,5 @@
 package core;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,19 +14,20 @@ import java.util.Comparator;
 import java.io.FileWriter;
 import java.io.FileReader;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 import java.io.BufferedReader;
+import java.util.HashMap;
 
-public class LoadImage
-{
+public class LoadImage2 extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private BufferedImage img = null;
-	private int temporary[];
 	private int rgb[];
 	private int freq[][];
 	private Tree first;
 	private int count = 0;
-	private int RGB[];
-	private String bit[];
-	private int ctr = 0;
 	private int counter = 0;
 	private int charCounter = 0;
 	private Tree last;
@@ -34,86 +36,82 @@ public class LoadImage
 	private int imageWidth;
 	private int imageHeight;
 	private File file;
+	private HashMap <Integer, Integer>RGBFreq = new HashMap<Integer, Integer>();
+	private HashMap <Integer, String>RGBBit = new HashMap<Integer, String>();
 	
-	public LoadImage(File file)
+	public LoadImage2(){
+		first = null;
+	}
+	
+	public LoadImage2(File file)
 	{
 		this.file = file;
 		first = null;
 	}
 	
-	public LoadImage()
-	{
-		first = null;
-	}
 
-	
 	public void getImage(){
-		try 
-		{
-		    img = ImageIO.read(file);
-		    imageWidth = img.getWidth();
-		    imageHeight = img.getHeight();
-		} catch (IOException e)
-		{
+		try {
+			img = ImageIO.read(file);
+			imageWidth = img.getWidth();
+			imageHeight = img.getHeight();
+		} catch (IOException e) {
 			System.err.println("Error");
 		}
 	}
 
-	public void extractPixelInformation()
-	{
-		try
-		{
-			rgb = new int[img.getHeight()*img.getWidth()];
-			temporary= new int[img.getHeight()*img.getWidth()];
+	
+	public void extractPixelInformation(){
+		try{
+
 			int temp;
-			for(int a = 0; a < img.getHeight(); a++)
-			{
-				for(int b = 0; b < img.getWidth(); b++)
-				{
+			rgb = new int[imageWidth*imageHeight];
+			for(int a = 0; a < img.getHeight(); a++){
+				for(int b = 0; b < img.getWidth(); b++){
 					temp = img.getRGB(b,a);
-					temporary[counter] = temp;
 					rgb[counter++] = temp;
 				}
 			}
 		}catch(Exception e){}
 	}
 
-	public void getFrequencies()
-	{
+	public void getFrequencies(){
+		int f;
 		freq = new int[img.getHeight()*img.getWidth()][2];
-		Arrays.sort(rgb);
-		freq[0][0] = rgb[0];
-		freq[0][1] = 1;
-		for(int a = 1; a < img.getHeight()*img.getWidth(); a++)
+		for(int a = 0; a < rgb.length; a++)
 		{
-			if(rgb[a] == freq[count][0])
+			if(RGBFreq.containsKey(rgb[a]))
 			{
-				freq[count][1]++;
-			}else
-			{
-				freq[++count][0] = rgb[a];
-				freq[count][1] = 1;
+				f = RGBFreq.get(rgb[a]) + 1;
+				RGBFreq.put(rgb[a], f);
 			}
-
+			else
+			{
+				RGBFreq.put(rgb[a], 1);
+			}
 		}
-		count++;
-		
+
+		for(int key : RGBFreq.keySet())
+		{
+			freq[count][0] = key;
+			freq[count++][1] = RGBFreq.get(key);
+		}
 		freq = Arrays.copyOfRange(freq, 0, count);
+
 		Comparator<int[]> arrayComparator = new Comparator<int[]>()
 		{
-	        @Override
-	        public int compare(int[] o1, int[] o2) 
-	        {
-	            return o1[1]-o2[1];
-	        }
-	    };
+			@Override
+			public int compare(int[] o1, int[] o2)
+			{
+				return o1[1]-o2[1];
+			}
+		};
+
 		Arrays.sort(freq, arrayComparator);
 	}
-	
-	public void makeNodes()
-	{
-		for(int a = 0;a < count; a++)
-		{
+
+	public void makeNodes(){
+		for(int a = 0;a < count; a++){
 			Node node = new Node(freq[a][0], freq[a][1]);
 			node.isLeaf = true;
 			Tree tree = new Tree(node);
@@ -127,7 +125,8 @@ public class LoadImage
 		{
 			first = tree;
 			last = first;
-		}else
+		}
+		else
 		{
 			Tree current = first;
 			while(current != null)
@@ -137,7 +136,8 @@ public class LoadImage
 					if(current == first)
 					{
 						first = tree;
-					}else
+					}
+					else
 					{
 						current.previous.next = tree;
 					}
@@ -149,7 +149,8 @@ public class LoadImage
 				if(current.next != null)
 				{
 					current = current.next;
-				}else
+				}
+				else
 				{
 					last = tree;
 					current.next = tree;
@@ -167,7 +168,8 @@ public class LoadImage
 		{
 			last = last.previous;
 			last.next = null;
-		}else
+		}
+		else
 		{
 			first = null;
 			last = null;
@@ -175,33 +177,44 @@ public class LoadImage
 		return temp;
 	}
 
+	
 	public void generateTree()
 	{
 		Tree temp;
 		Tree temp2;
 
-		while(true)
+		if(count != 1)
 		{
-			temp = dequeue();
-			temp2 = dequeue();
-			if(temp != null && temp2 != null)
+			while(true)
 			{
-				Node node = new Node('\0', temp.root.getFrequency() + temp2.root.getFrequency());
-				node.setLeft(temp.root);
-				node.setRight(temp2.root);
-				Tree tree = new Tree(node);
-				insert(tree);
-			}else
-			{
-				if(first == null)
+
+				temp = dequeue();
+				temp2 = dequeue();
+				if(temp != null && temp2 != null)
 				{
-					first = temp;
+					Node node = new Node('\0', temp.root.getFrequency() + temp2.root.getFrequency());
+					node.setLeft(temp.root);
+					node.setRight(temp2.root);
+					Tree tree = new Tree(node);
+					insert(tree);
 				}
-				break;
+				else
+				{
+					if(first == null)
+					{
+						first = temp;
+					}
+					break;
+				}
 			}
 		}
-		RGB = new int[count];
-		bit = new String[count];
+		else
+		{
+			first.root.setBit("0");
+		}
+		//RGB = new int[count];
+		//bit = new String[count];
+		//trial = new int[count];
 	}
 
 	public void traverse(Node node)
@@ -220,16 +233,15 @@ public class LoadImage
 			}
 			if(node.left == null && node.right == null)
 			{
-				RGB[ctr] = node.getRGBValue();
-				bit[ctr] = node.getBit();
-				ctr++;
+				RGBBit.put(node.getRGBValue(), node.getBit());
+
 			}
 		}
 	}
+
 	
 	public void writeHuffmanToFile()
 	{
-		
 		getImage();
 		extractPixelInformation();
 		getFrequencies();
@@ -353,9 +365,9 @@ public class LoadImage
 		}
 
 	}
-
 	
-
+	
+	
 	public void compress(File huffmanFile)
 	{
 		getImage();
@@ -363,77 +375,77 @@ public class LoadImage
 		readHuffmanFile(huffmanFile);		
 		generateTree();
 		traverse(first.root);
-		try
-		{
+		try{
 			String fPath = file.getAbsolutePath();
 			fPath = fPath.substring(0, fPath.lastIndexOf('.')) + ".San";
 			FileWriter writer = new FileWriter(fPath);
 			writer.write(img.getWidth()+"x"+img.getHeight()+"\r");
+			//FileWriter writer = new FileWriter("trial.HEHE");
+			//int length = 0;
 			int size;
 			char ch;
-			String code;
-			String temp = "";			
+			String code = "10";
+			String temp = "";
 			for(int a = 0; a <counter; a++)
 			{
-				for(int b = 0; b < ctr; b++)
+				code = RGBBit.get(rgb[a]);
+				while(true)
 				{
-					if(temporary[a] == RGB[b])
+					size = 7 - temp.length();
+					if(size >=  code.length())
 					{
-						code = bit[b];
-						while(true)
+						temp = temp + code;
+						if(temp.length() == 7)
 						{
-							size = 7 - temp.length();
-							if(size >=  code.length())
-							{
-								temp = temp + code;
-								if(temp.length() == 7)
-								{
-									ch = (char)(Integer.parseInt(temp, 2));
-									writer.write(ch);
-									charCounter++;
-									temp = "";
-								}
-								if(a == counter - 1)
-								{
-									ch = (char)(Integer.parseInt(temp, 2));
-									writer.write(ch);
-									charCounter++;
-									lastBin = temp;
-								}
-								break;
-							}else
-							{
-								temp = temp + code.substring(0, size);
-								code = code.substring(size);
-								ch = (char)(Integer.parseInt(temp, 2));
-								writer.write(ch);
-								charCounter++;
-								temp = "";
-							}
+							ch = (char)(Integer.parseInt(temp, 2));
+							writer.write(ch);
+							charCounter++;
+							temp = "";
 						}
+						if(a == counter - 1)
+						{
+							ch = (char)(Integer.parseInt(temp, 2));
+							writer.write(ch);
+							charCounter++;
+							lastBin = temp;
+						}
+						break;
+					}
+					else
+					{
+						temp = temp + code.substring(0, size);
+						code = code.substring(size);
+						ch = (char)(Integer.parseInt(temp, 2));
+						writer.write(ch);
+						charCounter++;
+						temp = "";
 					}
 				}
 			}
-		writer.close();
+			writer.close();
 
-		}catch(Exception e)
-		{
-			System.err.println("File not found");
 		}
+		catch(Exception e)
+		{
+			System.err.println(e);
+	}
 }
 
 
 	public BufferedImage deCompress(File toBeDecompressed, File huffmanFile)
 	{
-		
 		readHuffmanFile(huffmanFile);
 		generateTree();
 		traverse(first.root);
 		int a = 0;
 		int b = 0;
+		//int d ;
+		int c = 0;
 		BufferedImage sheeet = null;
-		try{
-			int c = 0;
+		try
+		{
+
+			//System.out.println("\nDecompress\n");
 			String temp = "";
 			File file = toBeDecompressed;
 			FileReader reader = new FileReader(file);
@@ -458,8 +470,9 @@ public class LoadImage
 			/**************************************************************************************/
 			
 			sheeet = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+			//FileReader reader = new FileReader(file);
 			lastNode = first.root;
-			for(int k = 0; k < charCounter; k++)
+			for(int k = 0; k< charCounter; k++)
 			{
 				c = r.read();
 				temp = Integer.toBinaryString(c);
@@ -488,24 +501,35 @@ public class LoadImage
 							a = 0;
 							b++;
 						}
+
 					}
 				}
 			}
 
+			//ImageIO.write(sheeet, "png", new File("image.charot"));
 
-		}catch(Exception e)
+		}
+		catch(Exception e)
 		{
 			System.err.println(e);
 		}
 		return sheeet;
 	}
+	
+	
+	
+
 
 	public void traverseToDeCompress(char ch)
 	{
-		if(ch == '0'){
+		if(ch == '0')
+		{
 			lastNode = lastNode.left;
-		}else if(ch == '1'){
+		}
+		else if(ch == '1')
+		{
 			lastNode = lastNode.right;
 		}
 	}
+
 }
