@@ -30,6 +30,7 @@ public class LoadImage2 extends JFrame{
 	private int count = 0;
 	private int counter = 0;
 	private int charCounter = 0;
+	static int ctr = 0;
 	private Tree last;
 	private Node lastNode = null;
 	private String lastBin = "";
@@ -384,7 +385,7 @@ public class LoadImage2 extends JFrame{
 			//int length = 0;
 			int size;
 			char ch;
-			String code = "10";
+			String code = "";
 			String temp = "";
 			for(int a = 0; a <counter; a++)
 			{
@@ -399,13 +400,11 @@ public class LoadImage2 extends JFrame{
 						{
 							ch = (char)(Integer.parseInt(temp, 2));
 							writer.write(ch);
-							charCounter++;
 							temp = "";
 						}else if(a == counter - 1)
 						{
 							ch = (char)(Integer.parseInt(temp, 2));
 							writer.write(ch);
-							charCounter++;
 							lastBin = temp;
 						}
 						break;
@@ -416,13 +415,12 @@ public class LoadImage2 extends JFrame{
 						code = code.substring(size);
 						ch = (char)(Integer.parseInt(temp, 2));
 						writer.write(ch);
-						charCounter++;
 						temp = "";
 					}
 				}
 			}
 			writer.close();
-
+			
 		}
 		catch(Exception e)
 		{
@@ -459,7 +457,7 @@ public class LoadImage2 extends JFrame{
 			{
 				charCounter++;
 			}
-			charCounter++;
+			//charCounter++;
 			r.close();
 			reader = new FileReader(file);
 			r = new BufferedReader(reader);
@@ -489,8 +487,9 @@ public class LoadImage2 extends JFrame{
 				}
 				for(int i = 0; i < temp.length(); i++)
 				{
-					if(counter > 1)
+					if(count > 1){
 						traverseToDeCompress(temp.charAt(i));
+					}
 					if(lastNode.isLeaf)
 					{
 						sheeet.setRGB(a, b, lastNode.getRGBValue());
@@ -506,7 +505,7 @@ public class LoadImage2 extends JFrame{
 				}
 			}
 
-			//ImageIO.write(sheeet, "png", new File("image.charot"));
+			ImageIO.write(sheeet, "png", new File("heyo.charot"));
 
 		}
 		catch(Exception e)
