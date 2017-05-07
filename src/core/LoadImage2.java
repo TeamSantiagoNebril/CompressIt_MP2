@@ -401,8 +401,7 @@ public class LoadImage2 extends JFrame{
 							writer.write(ch);
 							charCounter++;
 							temp = "";
-						}
-						if(a == counter - 1)
+						}else if(a == counter - 1)
 						{
 							ch = (char)(Integer.parseInt(temp, 2));
 							writer.write(ch);
@@ -490,7 +489,8 @@ public class LoadImage2 extends JFrame{
 				}
 				for(int i = 0; i < temp.length(); i++)
 				{
-					traverseToDeCompress(temp.charAt(i));
+					if(counter > 1)
+						traverseToDeCompress(temp.charAt(i));
 					if(lastNode.isLeaf)
 					{
 						sheeet.setRGB(a, b, lastNode.getRGBValue());
